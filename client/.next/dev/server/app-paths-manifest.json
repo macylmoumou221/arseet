@@ -1,0 +1,11 @@
+{
+  "/_not-found/page": "app/_not-found/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/commandes/page": "app/commandes/page.js",
+  "/compte/page": "app/compte/page.js",
+  "/connexion/page": "app/connexion/page.js",
+  "/inscription/page": "app/inscription/page.js",
+  "/nouvelles-arrivages/page": "app/nouvelles-arrivages/page.js",
+  "/page": "app/page.js",
+  "/produits/page": "app/produits/page.js"
+}

@@ -1,0 +1,34 @@
+{
+  "app": {
+    "[project]/OneDrive/Bureau/WORK/arseet/client/app/_not-found/page": [
+      "static/media/2a65768255d6b625-s.p.d19752fb.woff2"
+    ],
+    "[project]/OneDrive/Bureau/WORK/arseet/client/app/admin/page": [
+      "static/media/2a65768255d6b625-s.p.d19752fb.woff2"
+    ],
+    "[project]/OneDrive/Bureau/WORK/arseet/client/app/commandes/page": [
+      "static/media/2a65768255d6b625-s.p.d19752fb.woff2"
+    ],
+    "[project]/OneDrive/Bureau/WORK/arseet/client/app/compte/page": [
+      "static/media/2a65768255d6b625-s.p.d19752fb.woff2"
+    ],
+    "[project]/OneDrive/Bureau/WORK/arseet/client/app/connexion/page": [
+      "static/media/2a65768255d6b625-s.p.d19752fb.woff2"
+    ],
+    "[project]/OneDrive/Bureau/WORK/arseet/client/app/inscription/page": [
+      "static/media/2a65768255d6b625-s.p.d19752fb.woff2"
+    ],
+    "[project]/OneDrive/Bureau/WORK/arseet/client/app/nouvelles-arrivages/page": [
+      "static/media/2a65768255d6b625-s.p.d19752fb.woff2"
+    ],
+    "[project]/OneDrive/Bureau/WORK/arseet/client/app/page": [
+      "static/media/2a65768255d6b625-s.p.d19752fb.woff2"
+    ],
+    "[project]/OneDrive/Bureau/WORK/arseet/client/app/produits/page": [
+      "static/media/2a65768255d6b625-s.p.d19752fb.woff2"
+    ]
+  },
+  "appUsingSizeAdjust": true,
+  "pages": {},
+  "pagesUsingSizeAdjust": false
+}
