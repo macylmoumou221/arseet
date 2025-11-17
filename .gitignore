@@ -48,3 +48,5 @@ tmp/
 
 # Project-specific / misc
 futurelandingpage.txt
+client_secret_682818450861-8baoqk330j7hlr1eh518sj2epst2b1ku.apps.googleusercontent.com.json
+server/scripts/exchange-code-for-token.js
