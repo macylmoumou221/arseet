@@ -1,0 +1,306 @@
+{
+  "info": {
+    "name": "Arseet E-commerce API",
+    "description": "Collection complète des endpoints de l'API Arseet E-commerce",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "adminToken",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Inscription",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"Benali\",\n  \"prenom\": \"Ahmed\",\n  \"email\": \"ahmed.benali@example.com\",\n  \"mot_de_passe\": \"Password123\",\n  \"telephone\": \"0555123456\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/inscription",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "inscription"]
+            }
+          }
+        },
+        {
+          "name": "Connexion",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"ahmed.benali@example.com\",\n  \"mot_de_passe\": \"Password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/connexion",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "connexion"]
+            }
+          }
+        },
+        {
+          "name": "Connexion Admin",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@arseet.com\",\n  \"mot_de_passe\": \"Admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/connexion",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "connexion"]
+            }
+          }
+        },
+        {
+          "name": "Profil (GET)",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/auth/profil",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "profil"]
+            }
+          }
+        },
+        {
+          "name": "Profil (PUT)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"telephone\": \"0666777888\",\n  \"adresse\": \"Nouvelle adresse\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/auth/profil",
+              "host": ["{{baseUrl}}"],
+              "path": ["auth", "profil"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Produits",
+      "item": [
+        {
+          "name": "Liste des produits",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/produits?page=1&limit=12",
+              "host": ["{{baseUrl}}"],
+              "path": ["produits"],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "12"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Produit par ID",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/produits/1",
+              "host": ["{{baseUrl}}"],
+              "path": ["produits", "1"]
+            }
+          }
+        },
+        {
+          "name": "Créer produit (Admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom\": \"T-Shirt Premium\",\n  \"description\": \"T-shirt en coton bio\",\n  \"prix\": 2500,\n  \"categorie\": \"homme\",\n  \"stock\": 100,\n  \"est_nouveau\": true,\n  \"couleurs\": [\n    {\"couleur\": \"Bleu\", \"code_hexa\": \"#0000FF\", \"stock_couleur\": 50}\n  ],\n  \"tailles\": [\n    {\"taille\": \"M\", \"stock_taille\": 30},\n    {\"taille\": \"L\", \"stock_taille\": 40}\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/produits",
+              "host": ["{{baseUrl}}"],
+              "path": ["produits"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Commandes",
+      "item": [
+        {
+          "name": "Créer commande",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"nom_complet\": \"Karim Benali\",\n  \"email\": \"karim@example.com\",\n  \"telephone\": \"0777888999\",\n  \"adresse_livraison\": \"Cité des 1000 Logements\",\n  \"ville\": \"Constantine\",\n  \"wilaya\": \"Constantine\",\n  \"methode_livraison\": \"domicile\",\n  \"articles\": [\n    {\n      \"produit_id\": 1,\n      \"quantite\": 2,\n      \"taille\": \"L\"\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/commandes",
+              "host": ["{{baseUrl}}"],
+              "path": ["commandes"]
+            }
+          }
+        },
+        {
+          "name": "Mes commandes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/commandes",
+              "host": ["{{baseUrl}}"],
+              "path": ["commandes"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Newsletter",
+      "item": [
+        {
+          "name": "S'inscrire",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"contact@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/newsletter",
+              "host": ["{{baseUrl}}"],
+              "path": ["newsletter"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Dashboard",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/dashboard",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "dashboard"]
+            }
+          }
+        },
+        {
+          "name": "Toutes les commandes",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{adminToken}}"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/admin/commandes",
+              "host": ["{{baseUrl}}"],
+              "path": ["admin", "commandes"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

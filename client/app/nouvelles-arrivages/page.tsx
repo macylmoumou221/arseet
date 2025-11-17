@@ -1,0 +1,276 @@
+"use client"
+
+import { useState, useEffect } from "react"
+import { CarteProduit } from "@/components/carte-produit"
+import { api } from "@/lib/api"
+import type { Produit, Couleur } from "@/lib/types"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input"
+
+// Map backend product to frontend Produit type
+function mapBackendProduct(backendProduct: any): Produit {
+  const defaultImage = backendProduct.image_avant || backendProduct.images || "/placeholder.jpg"
+  const backImage = backendProduct.image_arriere || backendProduct.images || "/placeholder.jpg"
+  
+  let couleurs: Couleur[] = []
+  
+  if (backendProduct.couleurs && backendProduct.couleurs.length > 0) {
+    couleurs = backendProduct.couleurs.map((couleur: any) => {
+      const frontImg = couleur.image_avant || defaultImage
+      const backImg = couleur.image_arriere || backImage
+      
+      return {
+        nom: couleur.couleur || couleur.nom || couleur.name || "Standard",
+        code: couleur.code_hexa || couleur.code || couleur.color || "#000000",
+        imageFront: frontImg && frontImg !== "" ? frontImg : "/placeholder.jpg",
+        imageBack: backImg && backImg !== "" ? backImg : "/placeholder.jpg",
+      }
+    })
+  } else {
+    couleurs = [
+      {
+        nom: "Standard",
+        code: "#000000",
+        imageFront: defaultImage && defaultImage !== "" ? defaultImage : "/placeholder.jpg",
+        imageBack: backImage && backImage !== "" ? backImage : "/placeholder.jpg",
+      },
+    ]
+  }
+
+  return {
+    id: backendProduct.id.toString(),
+    nom: backendProduct.nom,
+    prix: parseFloat(backendProduct.prix_final || backendProduct.prix),
+    description: backendProduct.description || "",
+    couleurs: couleurs,
+    categorie: backendProduct.categorie || "homme",
+    nouveau: backendProduct.est_nouveau || false,
+    tailles: backendProduct.tailles || [],
+    stock: backendProduct.stock || 0,
+    enRupture: backendProduct.en_rupture || false,
+  }
+}
+
+export default function NouvellesArrivagesPage() {
+  const [produitsNouveaux, setProduitsNouveaux] = useState<Produit[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  
+  const [stockFilter, setStockFilter] = useState<string>("all")
+  const [selectedColor, setSelectedColor] = useState<string>("all")
+  const [selectedSize, setSelectedSize] = useState<string>("all")
+  const [minPrice, setMinPrice] = useState<string>("")
+  const [maxPrice, setMaxPrice] = useState<string>("")
+
+  // Fetch products from backend
+  useEffect(() => {
+    const fetchNewProducts = async () => {
+      try {
+        setLoading(true)
+        const response: any = await api.products.getAll()
+        
+        if (response.success && response.data?.produits) {
+          const mappedProducts = response.data.produits.map(mapBackendProduct)
+          // Filter only products with est_nouveau = true AND NOT en_rupture
+          const nouveaux = mappedProducts.filter((p: Produit) => p.nouveau && !p.enRupture)
+          setProduitsNouveaux(nouveaux)
+        } else {
+          setError("Erreur lors du chargement des produits")
+        }
+      } catch (err) {
+        console.error("Error fetching products:", err)
+        setError("Impossible de charger les produits. Vérifiez que le backend est démarré.")
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchNewProducts()
+  }, [])
+
+  // Get unique colors and sizes from products
+  const allColors = Array.from(new Set(produitsNouveaux.flatMap((p) => p.couleurs.map(c => c.nom))))
+  const allSizes = Array.from(new Set(produitsNouveaux.flatMap((p) => {
+    if (!p.tailles) return []
+    // Handle both string arrays and object arrays from backend
+    return p.tailles.map(t => typeof t === 'string' ? t : (t as any).taille || String(t))
+  })))
+
+  // Filter products based on selected filters
+  const filteredProducts = produitsNouveaux.filter((produit) => {
+    // ALWAYS exclude products in rupture for nouvelles arrivages
+    if (produit.enRupture) return false
+    
+    // Stock filter (only "all" and "in-stock" make sense since we exclude rupture above)
+    if (stockFilter === "in-stock" && produit.stock === 0) return false
+    if (stockFilter === "out-of-stock") return false // Don't show any products when this is selected
+    
+    // Color filter
+    if (selectedColor !== "all" && !produit.couleurs.some(c => c.nom === selectedColor)) return false
+    
+    // Size filter
+    if (selectedSize !== "all" && produit.tailles) {
+      const productSizes = produit.tailles.map(t => typeof t === 'string' ? t : (t as any).taille || String(t))
+      if (!productSizes.includes(selectedSize)) return false
+    }
+    
+    // Price range filter
+    const min = minPrice ? parseFloat(minPrice) : 0
+    const max = maxPrice ? parseFloat(maxPrice) : Infinity
+    if (produit.prix < min || produit.prix > max) return false
+    
+    return true
+  })
+
+  if (loading) {
+    return (
+      <main className="py-16 animate-fade-in">
+        <div className="mb-12 text-center">
+          <div className="container mx-auto px-4">
+            <h1 className="mb-6 text-5xl font-bold tracking-tight">Nouvelles Arrivages</h1>
+          </div>
+          <div className="w-full h-[1px] bg-foreground/20"></div>
+        </div>
+        <div className="container mx-auto px-4">
+          <div className="text-center py-12">
+            <p className="text-muted-foreground text-lg">Chargement des nouveaux produits...</p>
+          </div>
+        </div>
+      </main>
+    )
+  }
+
+  if (error) {
+    return (
+      <main className="py-16 animate-fade-in">
+        <div className="mb-12 text-center">
+          <div className="container mx-auto px-4">
+            <h1 className="mb-6 text-5xl font-bold tracking-tight">Nouvelles Arrivages</h1>
+          </div>
+          <div className="w-full h-[1px] bg-foreground/20"></div>
+        </div>
+        <div className="container mx-auto px-4">
+          <div className="text-center py-12">
+            <p className="text-red-500 text-lg">{error}</p>
+            <p className="text-muted-foreground text-sm mt-2">
+              Assurez-vous que le backend est démarré sur http://localhost:5000
+            </p>
+          </div>
+        </div>
+      </main>
+    )
+  }
+
+  return (
+    <main className="py-16 animate-fade-in">
+      <div className="mb-12 text-center">
+        <div className="container mx-auto px-4">
+          <h1 className="mb-6 text-5xl font-bold tracking-tight">Nouvelles Arrivages</h1>
+          <p className="text-muted-foreground text-lg">Découvrez nos derniers produits</p>
+        </div>
+        <div className="w-full h-[1px] bg-foreground/20"></div>
+      </div>
+
+      <div className="container mx-auto px-4">
+        {/* Filtering Options - Left Aligned */}
+        <div className="mb-8 flex justify-start">
+          <div className="flex flex-wrap gap-4 items-center">
+            {/* Stock Filter */}
+            <div className="flex items-center gap-2">
+              <Label htmlFor="stock" className="font-medium text-sm">
+                Stock:
+              </Label>
+              <Select value={stockFilter} onValueChange={setStockFilter}>
+                <SelectTrigger id="stock" className="w-[140px]">
+                  <SelectValue placeholder="Tous" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Tous</SelectItem>
+                  <SelectItem value="in-stock">En stock</SelectItem>
+                  {/* Rupture option removed - nouvelles arrivages never show rupture items */}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Color Filter */}
+            <div className="flex items-center gap-2">
+              <Label htmlFor="color" className="font-medium text-sm">
+                Couleur:
+              </Label>
+              <Select value={selectedColor} onValueChange={setSelectedColor}>
+                <SelectTrigger id="color" className="w-[140px]">
+                  <SelectValue placeholder="Toutes" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Toutes</SelectItem>
+                  {allColors.map((color) => (
+                    <SelectItem key={color} value={color}>
+                      {color.charAt(0).toUpperCase() + color.slice(1)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Size Filter */}
+            <div className="flex items-center gap-2">
+              <Label htmlFor="size" className="font-medium text-sm">
+                Taille:
+              </Label>
+              <Select value={selectedSize} onValueChange={setSelectedSize}>
+                <SelectTrigger id="size" className="w-[140px]">
+                  <SelectValue placeholder="Toutes" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">Toutes</SelectItem>
+                  {allSizes.map((size) => (
+                    <SelectItem key={size} value={size}>
+                      {size}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+
+            {/* Price Range Filter */}
+            <div className="flex items-center gap-2">
+              <Label className="font-medium text-sm">Prix (DA):</Label>
+              <Input
+                type="number"
+                placeholder="Min"
+                value={minPrice}
+                onChange={(e) => setMinPrice(e.target.value)}
+                className="w-[100px]"
+                min="0"
+              />
+              <span className="text-sm">-</span>
+              <Input
+                type="number"
+                placeholder="Max"
+                value={maxPrice}
+                onChange={(e) => setMaxPrice(e.target.value)}
+                className="w-[100px]"
+                min="0"
+              />
+            </div>
+          </div>
+        </div>
+
+        {filteredProducts.length > 0 ? (
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {filteredProducts.map((produit, index) => (
+              <div key={produit.id} className="animate-fade-in" style={{ animationDelay: `${index * 0.1}s` }}>
+                <CarteProduit produit={produit} />
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground text-lg">Aucun produit ne correspond à vos critères</p>
+          </div>
+        )}
+      </div>
+    </main>
+  )
+}

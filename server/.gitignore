@@ -1,0 +1,23 @@
+# Dépendances
+node_modules/
+package-lock.json
+
+# Variables d'environnement
+.env
+
+# Logs
+logs/
+*.log
+
+# Fichiers temporaires
+uploads/
+temp/
+tmp/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db

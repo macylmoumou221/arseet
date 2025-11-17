@@ -1,0 +1,294 @@
+================================================================================
+                    LISTE COMPLÈTE DES ENDPOINTS - ARSEET BACKEND
+================================================================================
+
+Base URL: http://localhost:5000
+
+================================================================================
+AUTHENTIFICATION (/api/auth)
+================================================================================
+
+1. POST   /api/auth/inscription
+   Desc:  Inscription d'un nouvel utilisateur
+   Auth:  Public
+   Body:  { nom, prenom, email, mot_de_passe, telephone }
+
+2. POST   /api/auth/verify-email
+   Desc:  Vérifier l'email avec le code à 8 chiffres
+   Auth:  Public
+   Body:  { email, code }
+
+3. POST   /api/auth/resend-verification
+   Desc:  Renvoyer le code de vérification par email
+   Auth:  Public
+   Body:  { email }
+
+4. POST   /api/auth/connexion
+   Desc:  Connexion d'un utilisateur
+   Auth:  Public
+   Body:  { email, mot_de_passe }
+
+5. GET    /api/auth/profil
+   Desc:  Récupérer le profil de l'utilisateur connecté
+   Auth:  Private (JWT Token)
+
+6. PUT    /api/auth/profil
+   Desc:  Mettre à jour le profil de l'utilisateur connecté
+   Auth:  Private (JWT Token)
+   Body:  { nom, prenom, email, telephone, adresse, ville, code_postal, mot_de_passe }
+
+================================================================================
+PRODUITS (/api/produits)
+================================================================================
+
+7. GET    /api/produits
+   Desc:  Récupérer tous les produits avec pagination et filtres
+   Auth:  Public
+   Query: page, limit, categorie, nouveaute, search, prix_min, prix_max, sort, order
+
+8. GET    /api/produits/:id
+   Desc:  Récupérer un produit par ID
+   Auth:  Public
+   Params: id (integer)
+
+9. POST   /api/produits
+   Desc:  Créer un nouveau produit (Admin)
+   Auth:  Private/Admin (JWT Token)
+   Type:  multipart/form-data
+   Body:  nom, description, prix, prix_promo, categorie, stock, promotion, est_nouveau, en_rupture,
+          image_avant (file), image_arriere (file), images[] (files, max 10), 
+          couleurs (JSON), tailles (JSON)
+
+10. PUT   /api/produits/:id
+    Desc:  Mettre à jour un produit (Admin)
+    Auth:  Private/Admin (JWT Token)
+    Type:  multipart/form-data
+    Params: id (integer)
+    Body:  nom, description, prix, prix_promo, categorie, stock, promotion, est_nouveau, en_rupture,
+           image_avant (file), image_arriere (file), images[] (files, max 10), 
+           couleurs (JSON), tailles (JSON)
+
+11. DELETE /api/produits/:id
+    Desc:  Supprimer un produit (Admin)
+    Auth:  Private/Admin (JWT Token)
+    Params: id (integer)
+
+12. PATCH /api/produits/:id/rupture
+    Desc:  Marquer un produit en rupture ou disponible (Admin)
+    Auth:  Private/Admin (JWT Token)
+    Params: id (integer)
+    Body:  { en_rupture }
+
+13. POST  /api/produits/:id/couleurs
+    Desc:  Ajouter une couleur à un produit (Admin)
+    Auth:  Private/Admin (JWT Token)
+    Params: id (integer)
+    Body:  { couleur, code_hexa, stock_couleur }
+
+14. POST  /api/produits/:id/tailles
+    Desc:  Ajouter une taille à un produit (Admin)
+    Auth:  Private/Admin (JWT Token)
+    Params: id (integer)
+    Body:  { taille, stock_taille, mesures }
+
+15. PATCH /api/produits/:id/promotion
+    Desc:  Définir la promotion d'un produit (Admin)
+    Auth:  Private/Admin (JWT Token)
+    Params: id (integer)
+    Body:  { promotion }
+
+================================================================================
+COMMANDES (/api/commandes)
+================================================================================
+
+16. POST  /api/commandes
+    Desc:  Créer une nouvelle commande
+    Auth:  Public (peut être avec ou sans compte)
+    Body:  { nom_complet, email, telephone, adresse_livraison, ville, wilaya, code_postal, methode_livraison, articles[], notes }
+
+17. GET   /api/commandes/:id
+    Desc:  Récupérer une commande par ID
+    Auth:  Public (avec email en query)
+    Params: id (integer)
+    Query:  email (required for non-authenticated users)
+
+18. GET   /api/commandes
+    Desc:  Récupérer les commandes de l'utilisateur connecté
+    Auth:  Private (JWT Token)
+    Query:  page, limit
+
+================================================================================
+NEWSLETTER (/api/newsletter)
+================================================================================
+
+19. POST  /api/newsletter
+    Desc:  Inscription à la newsletter
+    Auth:  Public
+    Body:  { email, source }
+
+20. DELETE /api/newsletter/:email
+    Desc:  Désinscription de la newsletter
+    Auth:  Public
+    Params: email (string)
+
+================================================================================
+ADMIN - DASHBOARD (/api/admin)
+================================================================================
+
+21. GET   /api/admin/dashboard
+    Desc:  Récupérer les statistiques du dashboard
+    Auth:  Private/Admin (JWT Token)
+
+================================================================================
+ADMIN - UTILISATEURS (/api/admin/users)
+================================================================================
+
+22. GET   /api/admin/users
+    Desc:  Récupérer tous les utilisateurs
+    Auth:  Private/Admin (JWT Token)
+    Query:  page, limit, search
+
+23. PATCH /api/admin/users/:id/toggle-admin
+    Desc:  Promouvoir/Rétrograder un utilisateur en admin
+    Auth:  Private/Admin (JWT Token)
+    Params: id (integer)
+
+24. PATCH /api/admin/users/:id/toggle-actif
+    Desc:  Activer/Désactiver un compte utilisateur
+    Auth:  Private/Admin (JWT Token)
+    Params: id (integer)
+
+25. DELETE /api/admin/users/:id
+    Desc:  Supprimer un utilisateur
+    Auth:  Private/Admin (JWT Token)
+    Params: id (integer)
+
+================================================================================
+ADMIN - COMMANDES (/api/admin/commandes)
+================================================================================
+
+26. GET   /api/admin/commandes
+    Desc:  Récupérer toutes les commandes
+    Auth:  Private/Admin (JWT Token)
+    Query:  page, limit, statut, search
+
+27. PATCH /api/admin/commandes/:id/statut
+    Desc:  Mettre à jour le statut d'une commande
+    Auth:  Private/Admin (JWT Token)
+    Params: id (integer)
+    Body:  { statut, numero_suivi }
+
+28. POST  /api/admin/commandes/:id/facture
+    Desc:  Uploader la facture PDF d'une commande
+    Auth:  Private/Admin (JWT Token)
+    Type:  multipart/form-data
+    Params: id (integer)
+    Body:  facture (PDF file, max 10MB)
+
+================================================================================
+ADMIN - NEWSLETTER (/api/admin/newsletter)
+================================================================================
+
+29. GET   /api/admin/newsletter
+    Desc:  Récupérer la liste des abonnés à la newsletter
+    Auth:  Private/Admin (JWT Token)
+    Query:  page, limit, actif
+
+================================================================================
+UTILITAIRES
+================================================================================
+
+30. GET   /
+    Desc:  Route de bienvenue avec informations sur l'API
+    Auth:  Public
+
+31. GET   /api/health
+    Desc:  Vérifier que le serveur fonctionne
+    Auth:  Public
+
+32. GET   /api/utils/wilayas
+    Desc:  Récupérer la liste complète des 58 wilayas d'Algérie
+    Auth:  Public
+
+33. GET   /api/utils/wilayas/:code
+    Desc:  Récupérer une wilaya par son code (01-58)
+    Auth:  Public
+    Params: code (string, ex: "16" pour Alger)
+
+34. GET   /api/utils/wilayas/search/:nom
+    Desc:  Rechercher une wilaya par son nom
+    Auth:  Public
+    Params: nom (string, ex: "Alger")
+
+================================================================================
+RÉSUMÉ PAR CATÉGORIE
+================================================================================
+
+AUTHENTIFICATION:     6 endpoints
+PRODUITS:             9 endpoints
+COMMANDES:            3 endpoints
+NEWSLETTER:           2 endpoints
+ADMIN - DASHBOARD:    1 endpoint
+ADMIN - USERS:        4 endpoints
+ADMIN - COMMANDES:    3 endpoints
+ADMIN - NEWSLETTER:   1 endpoint
+UTILITAIRES:          5 endpoints
+
+TOTAL:                34 endpoints
+
+================================================================================
+TYPES D'AUTHENTIFICATION
+================================================================================
+
+Public:               15 endpoints (pas de token requis)
+Private:              5 endpoints (JWT token requis, utilisateur connecté)
+Private/Admin:        10 endpoints (JWT token requis, utilisateur admin)
+
+================================================================================
+MÉTHODES HTTP UTILISÉES
+================================================================================
+
+GET:                  12 endpoints
+POST:                 8 endpoints
+PUT:                  1 endpoint
+PATCH:                7 endpoints
+DELETE:               2 endpoints
+
+================================================================================
+NOTES IMPORTANTES
+================================================================================
+
+1. Tous les endpoints retournent du JSON avec format standard:
+   { success: boolean, message: string, data: object }
+
+2. Les endpoints protégés nécessitent un header:
+   Authorization: Bearer <JWT_TOKEN>
+
+3. Les endpoints admin nécessitent que l'utilisateur ait est_admin = true
+
+4. Rate limiting: 100 requêtes par 15 minutes par IP
+
+5. CORS activé pour les requêtes cross-origin
+
+6. Validation automatique des données avec middlewares
+
+7. Gestion d'erreurs centralisée avec messages en français
+
+8. Upload d'images via Cloudinary:
+   - image_avant: Image principale (face avant) - 1 fichier
+   - image_arriere: Image arrière (face arrière) - 1 fichier  
+   - images[]: Images supplémentaires (max 10 fichiers)
+   - Formats acceptés: JPG, JPEG, PNG (max 5MB par image)
+
+9. Emails envoyés via SendGrid (optionnel en développement)
+
+10. Email verification obligatoire pour se connecter
+
+11. Promotion system: Integer 0-100 (percentage discount)
+    - prix_final automatically calculated: prix * (1 - promotion/100)
+
+12. ⚠️  CART FUNCTIONALITY NOT INCLUDED IN THIS BACKEND
+
+================================================================================
+Pour plus de détails, consultez API_DOCUMENTATION.md
+================================================================================

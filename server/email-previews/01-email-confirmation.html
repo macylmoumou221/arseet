@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arseet</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+      background-color: #f5f5f5;
+      padding: 20px;
+      line-height: 1.6;
+      color: #333333;
+    }
+    .email-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #ffffff;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    }
+    .header {
+      background-color: #000000;
+      color: #ffffff;
+      text-align: center;
+      padding: 32px 40px;
+    }
+    .header img {
+      max-width: 180px;
+      height: auto;
+      display: block;
+      margin: 0 auto;
+    }
+    .header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      text-transform: lowercase;
+      letter-spacing: 4px;
+    }
+    .content {
+      padding: 40px;
+      background-color: #ffffff;
+    }
+    .content p {
+      font-size: 15px;
+      margin-bottom: 18px;
+      color: #444444;
+    }
+    .code-box {
+      background-color: #000000;
+      color: #ffffff;
+      padding: 28px;
+      text-align: center;
+      border-radius: 10px;
+      margin: 36px 0;
+    }
+    .code-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+      opacity: 0.75;
+    }
+    .code {
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: 10px;
+      font-family: 'Courier New', monospace;
+    }
+    .card {
+      border: 1px solid #e6e6e6;
+      border-radius: 10px;
+      padding: 24px;
+      margin: 28px 0;
+      background-color: #ffffff;
+    }
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+      color: #111111;
+    }
+    .key-value {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: #333333;
+    }
+    .list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .list li {
+      position: relative;
+      padding-left: 18px;
+      margin-bottom: 12px;
+      font-size: 14px;
+      color: #3a3a3a;
+    }
+    .list li::before {
+      content: '•';
+      position: absolute;
+      left: 0;
+      top: 0;
+      color: #000000;
+      font-size: 18px;
+    }
+    .button {
+      display: inline-block;
+      background-color: #000000;
+      color: #ffffff !important;
+      padding: 14px 40px;
+      text-decoration: none;
+      border-radius: 6px;
+      font-weight: 600;
+      font-size: 15px;
+      margin: 26px 0 10px;
+    }
+    .muted {
+      color: #777777;
+      font-size: 13px;
+    }
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+    }
+    .table th,
+    .table td {
+      text-align: left;
+      padding: 10px 0;
+      font-size: 14px;
+      color: #333333;
+      border-bottom: 1px solid #e5e5e5;
+    }
+    .table th {
+      font-weight: 600;
+    }
+    .footer {
+      background-color: #f9f9f9;
+      padding: 30px 40px;
+      text-align: center;
+      border-top: 1px solid #ededed;
+    }
+    .footer p {
+      font-size: 13px;
+      color: #888888;
+      margin-bottom: 6px;
+    }
+    @media only screen and (max-width: 600px) {
+      .content,
+      .header,
+      .footer {
+        padding: 28px 22px;
+      }
+      .code {
+        font-size: 28px;
+        letter-spacing: 8px;
+      }
+      .card {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <div class="header">
+      <img src="https://res.cloudinary.com/dtbfppoys/image/upload/v1762694418/arseet_branding/logo_email_white.png" alt="Arseet" />
+    </div>
+    <div class="content">
+      
+    <p>Bonjour Jean Dupont,</p>
+    <p>Voici votre code de vérification pour sécuriser l'accès à votre compte :</p>
+    <div class="code-box">
+      <div class="code-label">Code de vérification</div>
+      <div class="code">12345678</div>
+    </div>
+    <p class="muted">Ce code expirera dans <strong>15 minutes</strong>.</p>
+    <p>Si vous n'êtes pas à l'origine de cette demande, ignorez simplement cet email.</p>
+    <p style="margin-top: 32px;">
+      Merci,<br>
+      <strong>Arseet</strong>
+    </p>
+  
+    </div>
+    <div class="footer">
+      <p>© 2025 Arseet. Tous droits réservés.</p>
+<p>arseetwear@gmail.com</p>
+    </div>
+  </div>
+</body>
+</html>

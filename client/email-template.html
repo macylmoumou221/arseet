@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Email Arseet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .email-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Header */
+        .header {
+            background-color: #000000;
+            color: #ffffff;
+            text-align: center;
+            padding: 30px 40px;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        /* Content Section */
+        .content {
+            padding: 40px;
+            color: #333333;
+        }
+
+        .content p {
+            font-size: 15px;
+            margin-bottom: 15px;
+            color: #555555;
+        }
+
+        /* Code Box */
+        .code-box {
+            background-color: #000000;
+            color: #ffffff;
+            padding: 25px;
+            text-align: center;
+            border-radius: 8px;
+            margin: 30px 0;
+        }
+
+        .code-label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            opacity: 0.8;
+        }
+
+        .code {
+            font-size: 36px;
+            font-weight: 700;
+            letter-spacing: 8px;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* Button */
+        .button {
+            display: inline-block;
+            background-color: #000000;
+            color: #ffffff;
+            padding: 14px 40px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 15px;
+            margin: 20px 0;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: #f9f9f9;
+            padding: 30px 40px;
+            text-align: center;
+            border-top: 1px solid #e5e5e5;
+        }
+
+        .footer p {
+            font-size: 13px;
+            color: #888888;
+            margin-bottom: 5px;
+        }
+
+        /* Responsive */
+        @media only screen and (max-width: 600px) {
+            .content,
+            .header,
+            .footer {
+                padding: 30px 20px;
+            }
+
+            .code {
+                font-size: 28px;
+                letter-spacing: 4px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>ARSEET</h1>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content">
+            <p>Bonjour,</p>
+            
+            <p>
+                Voici votre code de vérification pour réinitialiser votre mot de passe :
+            </p>
+
+            <!-- Verification Code -->
+            <div class="code-box">
+                <div class="code-label">Code de vérification</div>
+                <div class="code">123456</div>
+            </div>
+
+            <p>
+                Ce code expire dans <strong>10 minutes</strong>.
+            </p>
+
+            <p style="margin-top: 30px;">
+                Merci,<br>
+                <strong>L'équipe Arseet</strong>
+            </p>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>© 2025 Arseet. Tous droits réservés.</p>
+            <p>contact@arseet.com</p>
+        </div>
+    </div>
+</body>
+</html>

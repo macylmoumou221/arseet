@@ -1,0 +1,359 @@
+# =======================================
+# EXEMPLES DE REQUÊTES API - ARSEET
+# =======================================
+# Utilisez ces exemples avec Postman, Insomnia, ou cURL
+
+### Variables
+@baseUrl = http://localhost:5000/api
+@token = votre_token_jwt_ici
+@adminToken = votre_token_admin_ici
+
+# =======================================
+# AUTHENTIFICATION
+# =======================================
+
+### Inscription
+POST {{baseUrl}}/auth/inscription
+Content-Type: application/json
+
+{
+  "nom": "Benali",
+  "prenom": "Ahmed",
+  "email": "ahmed.benali@example.com",
+  "mot_de_passe": "Password123",
+  "telephone": "0555123456",
+  "adresse": "123 Rue de la Liberté",
+  "ville": "Alger",
+  "code_postal": "16000"
+}
+
+### Connexion
+POST {{baseUrl}}/auth/connexion
+Content-Type: application/json
+
+{
+  "email": "ahmed.benali@example.com",
+  "mot_de_passe": "Password123"
+}
+
+### Connexion Admin
+POST {{baseUrl}}/auth/connexion
+Content-Type: application/json
+
+{
+  "email": "admin@arseet.com",
+  "mot_de_passe": "Admin123"
+}
+
+### Récupérer le profil
+GET {{baseUrl}}/auth/profil
+Authorization: Bearer {{token}}
+
+### Mettre à jour le profil
+PUT {{baseUrl}}/auth/profil
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nom": "Benali",
+  "prenom": "Ahmed",
+  "telephone": "0666777888",
+  "adresse": "456 Avenue Pasteur",
+  "ville": "Oran"
+}
+
+# =======================================
+# PRODUITS
+# =======================================
+
+### Liste des produits
+GET {{baseUrl}}/produits?page=1&limit=12
+
+### Liste des produits - Catégorie Homme
+GET {{baseUrl}}/produits?categorie=homme&page=1&limit=12
+
+### Liste des produits - Nouveautés
+GET {{baseUrl}}/produits?nouveaute=true&page=1
+
+### Recherche de produits
+GET {{baseUrl}}/produits?search=t-shirt&page=1
+
+### Produits par gamme de prix
+GET {{baseUrl}}/produits?prix_min=1000&prix_max=5000
+
+### Produit par ID
+GET {{baseUrl}}/produits/1
+
+### Créer un produit (Admin) - JSON simple
+POST {{baseUrl}}/produits
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "nom": "T-Shirt Premium Homme",
+  "description": "T-shirt en coton bio, coupe moderne",
+  "prix": 2500.00,
+  "prix_promo": 1999.00,
+  "categorie": "homme",
+  "stock": 100,
+  "est_nouveau": true,
+  "marque": "Arseet Collection",
+  "matiere": "100% Coton Bio",
+  "couleurs": [
+    {
+      "couleur": "Bleu Marine",
+      "code_hexa": "#000080",
+      "stock_couleur": 50
+    },
+    {
+      "couleur": "Blanc",
+      "code_hexa": "#FFFFFF",
+      "stock_couleur": 50
+    }
+  ],
+  "tailles": [
+    {
+      "taille": "M",
+      "stock_taille": 30
+    },
+    {
+      "taille": "L",
+      "stock_taille": 40
+    },
+    {
+      "taille": "XL",
+      "stock_taille": 30
+    }
+  ]
+}
+
+### Mettre à jour un produit (Admin)
+PUT {{baseUrl}}/produits/1
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "nom": "T-Shirt Premium Homme - Édition Limitée",
+  "prix": 2800.00,
+  "stock": 150
+}
+
+### Marquer en rupture (Admin)
+PATCH {{baseUrl}}/produits/1/rupture
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "en_rupture": true
+}
+
+### Ajouter une couleur à un produit (Admin)
+POST {{baseUrl}}/produits/1/couleurs
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "couleur": "Noir",
+  "code_hexa": "#000000",
+  "stock_couleur": 40
+}
+
+### Ajouter une taille à un produit (Admin)
+POST {{baseUrl}}/produits/1/tailles
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "taille": "XXL",
+  "stock_taille": 20
+}
+
+### Supprimer un produit (Admin)
+DELETE {{baseUrl}}/produits/1
+Authorization: Bearer {{adminToken}}
+
+# =======================================
+# COMMANDES
+# =======================================
+
+### Créer une commande (sans compte)
+POST {{baseUrl}}/commandes
+Content-Type: application/json
+
+{
+  "nom_complet": "Karim Benali",
+  "email": "karim.benali@example.com",
+  "telephone": "0777888999",
+  "adresse_livraison": "Cité des 1000 Logements, Bt A, Appt 12",
+  "ville": "Constantine",
+  "wilaya": "Constantine",
+  "code_postal": "25000",
+  "methode_livraison": "domicile",
+  "articles": [
+    {
+      "produit_id": 1,
+      "quantite": 2,
+      "taille": "L",
+      "couleur": "Bleu Marine"
+    },
+    {
+      "produit_id": 2,
+      "quantite": 1,
+      "taille": "M",
+      "couleur": "Blanc"
+    }
+  ],
+  "notes": "Appeler avant la livraison SVP"
+}
+
+### Créer une commande (avec compte)
+POST {{baseUrl}}/commandes
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nom_complet": "Ahmed Benali",
+  "email": "ahmed.benali@example.com",
+  "telephone": "0555123456",
+  "adresse_livraison": "123 Rue de la Liberté",
+  "ville": "Alger",
+  "wilaya": "Alger",
+  "code_postal": "16000",
+  "methode_livraison": "yalidine",
+  "articles": [
+    {
+      "produit_id": 1,
+      "quantite": 1,
+      "taille": "L"
+    }
+  ]
+}
+
+### Récupérer une commande (avec email)
+GET {{baseUrl}}/commandes/1?email=karim.benali@example.com
+
+### Récupérer une commande (authentifié)
+GET {{baseUrl}}/commandes/1
+Authorization: Bearer {{token}}
+
+### Mes commandes
+GET {{baseUrl}}/commandes
+Authorization: Bearer {{token}}
+
+### Mes commandes avec pagination
+GET {{baseUrl}}/commandes?page=1&limit=10
+Authorization: Bearer {{token}}
+
+# =======================================
+# NEWSLETTER
+# =======================================
+
+### S'inscrire à la newsletter
+POST {{baseUrl}}/newsletter
+Content-Type: application/json
+
+{
+  "email": "contact@example.com",
+  "source": "homepage"
+}
+
+### Se désinscrire de la newsletter
+DELETE {{baseUrl}}/newsletter/contact@example.com
+
+# =======================================
+# ADMIN - DASHBOARD
+# =======================================
+
+### Dashboard
+GET {{baseUrl}}/admin/dashboard
+Authorization: Bearer {{adminToken}}
+
+# =======================================
+# ADMIN - UTILISATEURS
+# =======================================
+
+### Liste des utilisateurs
+GET {{baseUrl}}/admin/users?page=1&limit=20
+Authorization: Bearer {{adminToken}}
+
+### Rechercher un utilisateur
+GET {{baseUrl}}/admin/users?search=benali
+Authorization: Bearer {{adminToken}}
+
+### Promouvoir en admin
+PATCH {{baseUrl}}/admin/users/2/toggle-admin
+Authorization: Bearer {{adminToken}}
+
+### Activer/Désactiver un compte
+PATCH {{baseUrl}}/admin/users/2/toggle-actif
+Authorization: Bearer {{adminToken}}
+
+### Supprimer un utilisateur
+DELETE {{baseUrl}}/admin/users/2
+Authorization: Bearer {{adminToken}}
+
+# =======================================
+# ADMIN - COMMANDES
+# =======================================
+
+### Toutes les commandes
+GET {{baseUrl}}/admin/commandes?page=1&limit=20
+Authorization: Bearer {{adminToken}}
+
+### Commandes par statut
+GET {{baseUrl}}/admin/commandes?statut=en_cours
+Authorization: Bearer {{adminToken}}
+
+### Rechercher une commande
+GET {{baseUrl}}/admin/commandes?search=benali
+Authorization: Bearer {{adminToken}}
+
+### Mettre à jour le statut d'une commande
+PATCH {{baseUrl}}/admin/commandes/1/statut
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "statut": "confirmee"
+}
+
+### Marquer comme expédiée avec numéro de suivi
+PATCH {{baseUrl}}/admin/commandes/1/statut
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "statut": "expediee",
+  "numero_suivi": "YAL123456789"
+}
+
+### Marquer comme livrée
+PATCH {{baseUrl}}/admin/commandes/1/statut
+Authorization: Bearer {{adminToken}}
+Content-Type: application/json
+
+{
+  "statut": "livree"
+}
+
+# =======================================
+# ADMIN - NEWSLETTER
+# =======================================
+
+### Liste des abonnés
+GET {{baseUrl}}/admin/newsletter?page=1&limit=50
+Authorization: Bearer {{adminToken}}
+
+### Abonnés actifs uniquement
+GET {{baseUrl}}/admin/newsletter?actif=true
+Authorization: Bearer {{adminToken}}
+
+# =======================================
+# SANTÉ & INFO
+# =======================================
+
+### Health check
+GET {{baseUrl}}/health
+
+### Info API
+GET http://localhost:5000/

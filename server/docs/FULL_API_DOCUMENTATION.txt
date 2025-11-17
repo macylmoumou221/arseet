@@ -1,0 +1,210 @@
+# FULL API DOCUMENTATION - ARSEET E-COMMERCE
+
+Base URL: http://localhost:5000/api
+
+---
+
+## AUTHENTICATION (/api/auth)
+
+### Register
+POST /api/auth/inscription
+Content-Type: application/json
+{
+  "nom": "Dupont",
+  "prenom": "Jean",
+  "email": "jean.dupont@example.com",
+  "mot_de_passe": "MotDePasse123",
+  "telephone": "0555123456"
+}
+
+### Login
+POST /api/auth/connexion
+Content-Type: application/json
+{
+  "email": "jean.dupont@example.com",
+  "mot_de_passe": "MotDePasse123"
+}
+
+### Get Profile
+GET /api/auth/profil
+Authorization: Bearer <token>
+
+### Update Profile
+PUT /api/auth/profil
+Authorization: Bearer <token>
+Content-Type: application/json
+{
+  "nom": "Nouveau Nom",
+  "telephone": "0666777888"
+}
+
+---
+
+## PRODUCTS (/api/produits)
+
+### List Products
+GET /api/produits?page=1&limit=12&categorie=homme&nouveaute=true
+
+### Get Product by ID
+GET /api/produits/:id
+
+### Create Product (Admin)
+POST /api/produits
+Authorization: Bearer <admin_token>
+Content-Type: multipart/form-data
+{
+  "nom": "Nouveau Produit",
+  "description": "Description du produit",
+  "prix": 2500.00,
+  "categorie": "homme",
+  "stock": 100,
+  "est_nouveau": true,
+  "image_avant": <fichier>,
+  "image_arriere": <fichier>,
+  "couleurs": [
+    {"couleur": "Bleu", "code_hexa": "#0000FF", "stock_couleur": 50},
+    {"couleur": "Rouge", "code_hexa": "#FF0000", "stock_couleur": 50}
+  ],
+  "tailles": [
+    {"taille": "M", "stock_taille": 30},
+    {"taille": "L", "stock_taille": 40}
+  ]
+}
+
+### Update Product (Admin)
+PUT /api/produits/:id
+Authorization: Bearer <admin_token>
+Content-Type: multipart/form-data
+
+### Delete Product (Admin)
+DELETE /api/produits/:id
+Authorization: Bearer <admin_token>
+
+### Mark as Out of Stock (Admin)
+PATCH /api/produits/:id/rupture
+Authorization: Bearer <admin_token>
+Content-Type: application/json
+{
+  "en_rupture": true
+}
+
+---
+
+## ORDERS (/api/commandes)
+
+### Create Order
+POST /api/commandes
+Content-Type: application/json
+{
+  "nom_complet": "Jean Dupont",
+  "email": "jean.dupont@example.com",
+  "telephone": "0555123456",
+  "adresse_livraison": "123 Rue Example",
+  "ville": "Alger",
+  "wilaya": "Alger",
+  "code_postal": "16000",
+  "methode_livraison": "domicile",
+  "articles": [
+    {"produit_id": 1, "quantite": 2, "taille": "M", "couleur": "Bleu"},
+    {"produit_id": 3, "quantite": 1}
+  ],
+  "notes": "Livraison le matin si possible"
+}
+
+### Get Order by ID
+GET /api/commandes/:id?email=jean.dupont@example.com
+
+### Get My Orders (Authenticated)
+GET /api/commandes
+Authorization: Bearer <token>
+
+### Cancel Order (Authenticated)
+PATCH /api/commandes/:id/statut
+Authorization: Bearer <token>
+Content-Type: application/json
+{
+  "statut": "annulee"
+}
+
+---
+
+## NEWSLETTER (/api/newsletter)
+
+### Subscribe
+POST /api/newsletter
+Content-Type: application/json
+{
+  "email": "contact@example.com",
+  "source": "homepage"
+}
+
+### Unsubscribe
+DELETE /api/newsletter/contact@example.com
+
+---
+
+## ADMIN (/api/admin)
+
+All admin routes require Authorization: Bearer <admin_token>
+
+### Dashboard
+GET /api/admin/dashboard
+
+### User Management
+GET /api/admin/users?page=1&limit=20&search=dupont
+PATCH /api/admin/users/:id/toggle-admin
+PATCH /api/admin/users/:id/toggle-actif
+DELETE /api/admin/users/:id
+
+### Order Management
+GET /api/admin/commandes?page=1&statut=en_cours
+PATCH /api/admin/commandes/:id/statut
+Content-Type: application/json
+{
+  "statut": "expediee",
+  "numero_suivi": "YAL123456789"
+}
+
+POST /api/admin/commandes/:id/facture (multipart/form-data)
+DELETE /api/admin/commandes/:id (commande annulée uniquement)
+
+### Newsletter Management
+GET /api/admin/newsletter?actif=true&page=1
+
+---
+
+## VALIDATIONS
+- Password: min 8 chars
+- Phone: Algerian format (0XXXXXXXXX)
+- Email: valid, unique
+- Product: price > 0, stock >= 0, images JPG/JPEG/PNG (max 5MB), categories: homme, femme, enfant, accessoires, autre
+- Order: quantity >= 1, delivery: domicile, zr_express; status: en_cours, expediee, livree, annulee
+
+---
+
+## SECURITY
+- Rate limit: 100 requests/15min/IP
+- Helmet.js, CORS enabled
+- JWT (30 days), bcrypt (10 rounds)
+
+---
+
+## HTTP RESPONSE CODES
+200 OK
+201 Created
+400 Bad Request
+401 Unauthorized
+403 Forbidden
+404 Not Found
+409 Conflict
+429 Too Many Requests
+500 Internal Server Error
+
+---
+
+## HEALTH
+GET /api/health
+
+---
+
+For more details, see API_DOCUMENTATION.md or contact admin@arseet.com
