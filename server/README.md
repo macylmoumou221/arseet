@@ -226,13 +226,5 @@ curl -X POST http://localhost:5000/api/auth/inscription \
 ## 📞 Support
 
 Pour toute question ou problème:
-- Email: admin@arseet.com
+- Email: macylmoumou56@gmail.com
 - Documentation: [API_DOCUMENTATION.md](./API_DOCUMENTATION.md)
-
-## 📄 Licence
-
-ISC
-
----
-
-**Développé avec ❤️ pour Arseet E-commerce**
